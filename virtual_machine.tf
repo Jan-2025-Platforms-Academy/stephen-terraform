@@ -138,7 +138,7 @@ resource "azurerm_network_security_group" "private" {
     protocol                   = "Tcp"
     source_port_range          = "*"
     destination_port_range     = "22"
-    source_address_prefix      = "10.0.${count.index}.0/24"
+    source_address_prefix      = var.public_subnet_cidrs[count.index]
     destination_address_prefix = "*"
   }
 
@@ -164,14 +164,14 @@ resource "azurerm_linux_virtual_machine" "private" {
   name                = "${var.team_name}-private-vm-${count.index}"
   resource_group_name = azurerm_resource_group.this.name
   location            = azurerm_resource_group.this.location
-  size                = "Standard_B1ms"
-  admin_username      = "adminuser"
+  size                = var.vm_size
+  admin_username      = var.admin_username
   network_interface_ids = [
     azurerm_network_interface.private[count.index].id,
   ]
 
   admin_ssh_key {
-    username   = "adminuser"
+    username   = var.admin_username
     public_key = file("~/.ssh/id_ed25519.pub")
   }
 
@@ -181,10 +181,10 @@ resource "azurerm_linux_virtual_machine" "private" {
   }
 
   source_image_reference {
-    publisher = "Canonical"
-    offer     = "0001-com-ubuntu-server-jammy"
-    sku       = "22_04-lts"
-    version   = "latest"
+    publisher = var.vm_source.publisher
+    offer     = var.vm_source.offer
+    sku       = var.vm_source.sku
+    version   = var.vm_source.version
   }
 
   tags = {
