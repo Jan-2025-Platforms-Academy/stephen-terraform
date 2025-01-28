@@ -125,7 +125,8 @@ resource "azurerm_network_interface" "private" {
 
 # Create Public Security Group
 resource "azurerm_network_security_group" "private" {
-  name                = "${var.team_name}-private-nsg"
+  count               = 3
+  name                = "${var.team_name}-private-nsg-${count.index}"
   resource_group_name = azurerm_resource_group.this.name
   location            = azurerm_resource_group.this.location
 
@@ -137,7 +138,7 @@ resource "azurerm_network_security_group" "private" {
     protocol                   = "Tcp"
     source_port_range          = "*"
     destination_port_range     = "22"
-    source_address_prefix      = "*"
+    source_address_prefix      = "10.0.${count.index}.0/24"
     destination_address_prefix = "*"
   }
 
@@ -154,7 +155,7 @@ resource "azurerm_network_interface_security_group_association" "private" {
   }
 
   network_interface_id      = each.value
-  network_security_group_id = azurerm_network_security_group.private.id
+  network_security_group_id = azurerm_network_security_group.private[each.key].id
 }
 
 # Create Private VM
