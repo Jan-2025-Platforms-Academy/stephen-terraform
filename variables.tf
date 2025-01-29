@@ -19,7 +19,6 @@ variable "ssh_key_location" {
 variable "team_name" {
   type        = string
   description = "Name of the team."
-  default     = "stephen"
 }
 
 variable "public_vnet_cidr" {
@@ -31,7 +30,13 @@ variable "public_vnet_cidr" {
 variable "public_subnet_cidrs" {
   type        = list(string)
   description = "CIDR blocks for the public subnets."
-  default     = ["10.0.0.0/24", "10.0.1.0/24", "10.0.2.0/24"]
+  default     = ["10.0.0.0/24", "10.0.1.0/24"]
+}
+
+variable "bastion_cidr" {
+  type        = string
+  description = "CIDR blocks for the public subnets."
+  default     = "10.0.2.0/24"
 }
 
 variable "private_vnet_cidr" {
@@ -43,7 +48,7 @@ variable "private_vnet_cidr" {
 variable "private_subnet_cidrs" {
   type        = list(string)
   description = "CIDR blocks for the private subnets."
-  default     = ["10.1.0.0/24", "10.1.1.0/24", "10.1.2.0/24"]
+  default     = ["10.1.0.0/24", "10.1.1.0/24"]
 }
 
 variable "vm_size" {
