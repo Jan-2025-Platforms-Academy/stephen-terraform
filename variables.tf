@@ -67,3 +67,9 @@ variable "vm_source" {
     version   = "latest"
   }
 }
+
+variable "dns_ttl" {
+  type        = number
+  default     = 3600
+  description = "Time To Live (TTL) of the DNS record (in seconds)."
+}

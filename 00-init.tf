@@ -5,12 +5,7 @@ terraform {
       version = "4.16.0"
     }
   }
-  backend "azurerm" {
-    resource_group_name  = "stephen-blob"
-    storage_account_name = "stephenstorage"
-    container_name       = "stephen-blob"
-    key                  = "terraform.tfstate"
-  }
+  backend "azurerm" {}
 }
 
 provider "azurerm" {
