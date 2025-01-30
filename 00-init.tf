@@ -4,8 +4,16 @@ terraform {
       source  = "hashicorp/azurerm"
       version = "4.16.0"
     }
+    random = {
+      source  = "hashicorp/random"
+      version = "~>3.0"
+    }
   }
-  backend "azurerm" {}
+  backend "azurerm" {
+    resource_group_name  = "stephen-blob"
+    storage_account_name = "stephenstorage"
+    container_name       = "stephen-blob"
+  }
 }
 
 provider "azurerm" {

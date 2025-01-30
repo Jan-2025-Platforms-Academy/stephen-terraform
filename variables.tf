@@ -16,6 +16,13 @@ variable "ssh_key_location" {
   default     = "~/.ssh/id_ed25519.pub"
 }
 
+variable "admin_password" {
+  type        = string
+  description = "The administrator password of the SQL logical server."
+  sensitive   = true
+  default     = null
+}
+
 variable "team_name" {
   type        = string
   description = "Name of the team."
