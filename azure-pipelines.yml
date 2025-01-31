@@ -24,7 +24,7 @@ jobs:
       provider: 'azurerm'
       command: 'init'
       commandOptions: '-backend-config="key=terraform-prod.tfstate"'
-      backendServiceArm: '2025-Jan-Platforms-Academy(1)(d38fa016-777f-4647-bbc8-0aaf1933103c)'
+      backendServiceArm: '2025-Jan-Platforms-Academy(d38fa016-777f-4647-bbc8-0aaf1933103c)'
       backendAzureRmResourceGroupName: 'stephen-blob'
       backendAzureRmStorageAccountName: 'stephenstorage'
       backendAzureRmContainerName: 'stephen-blob'
@@ -60,7 +60,19 @@ jobs:
       artifact: terraform-env
       targetPath: $(System.DefaultWorkingDirectory)/.terraform
     displayName: 'Restore Terraform environment'
-    
+
+  - task: TerraformTaskV4@4
+    inputs:
+      provider: 'azurerm'
+      command: 'init'
+      commandOptions: '-backend-config="key=terraform-prod.tfstate"'
+      backendServiceArm: '2025-Jan-Platforms-Academy(d38fa016-777f-4647-bbc8-0aaf1933103c)'
+      backendAzureRmResourceGroupName: 'stephen-blob'
+      backendAzureRmStorageAccountName: 'stephenstorage'
+      backendAzureRmContainerName: 'stephen-blob'
+      backendAzureRmKey: 'terraform-prod.tfstate'
+    displayName: 'Reinitialize Terraform'
+
   - task: TerraformTaskV4@4
     inputs:
       provider: 'azurerm'
