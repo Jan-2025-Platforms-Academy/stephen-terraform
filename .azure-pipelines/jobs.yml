@@ -30,8 +30,7 @@ jobs:
 
 - job: ManualValidation
   displayName: Wait for validation
-  pool:
-    name: stephen-agent
+  pool: server
   timeoutInMinutes: 1440
   steps:
   - task: ManualValidation@1
