@@ -19,7 +19,7 @@ steps:
     provider: 'azurerm'
     command: 'init'
     commandOptions: '-backend-config="key=terraform-prod.tfstate"'
-    backendServiceArm: '2025-Jan-Platforms-Academy(1)(d38fa016-777f-4647-bbc8-0aaf1933103c)'
+    backendServiceArm: '2025-Jan-Platforms-Academy(d38fa016-777f-4647-bbc8-0aaf1933103c)'
     backendAzureRmResourceGroupName: 'stephen-blob'
     backendAzureRmStorageAccountName: 'stephenstorage'
     backendAzureRmContainerName: 'stephen-blob'
@@ -31,5 +31,13 @@ steps:
     provider: 'azurerm'
     command: 'plan'
     commandOptions: '-var-file=prod.tfvars'
-    environmentServiceNameAzureRM: '2025-Jan-Platforms-Academy(1)(d38fa016-777f-4647-bbc8-0aaf1933103c)'
+    environmentServiceNameAzureRM: '2025-Jan-Platforms-Academy(d38fa016-777f-4647-bbc8-0aaf1933103c)'
   displayName: 'Terraform plan'
+
+- task: TerraformTaskV4@4
+  inputs:
+    provider: 'azurerm'
+    command: 'apply'
+    commandOptions: '-var-file=prod.tfvars'
+    environmentServiceNameAzureRM: '2025-Jan-Platforms-Academy(d38fa016-777f-4647-bbc8-0aaf1933103c)'
+  displayName: 'Terraform apply'
