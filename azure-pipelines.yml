@@ -6,11 +6,13 @@
 trigger:
 - main
 
-pool: stephen-agent
+pool:
+  name: stephen-agent
 
-jobs: DevPlan
-- job:
-  pool: stephen-agent
+jobs:
+- job: DevPlan
+  pool:
+    name: stephen-agent
   steps:
   - task: TerraformInstaller@1
     inputs:
@@ -36,7 +38,8 @@ jobs: DevPlan
     displayName: 'Terraform plan'
 
 - job: DevApply
-  pool: stephen-agent
+  pool:
+    name: stephen-agent
   dependsOn: DevPlan
   steps:
   - task: TerraformTaskV4@4
