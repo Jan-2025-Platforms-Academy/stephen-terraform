@@ -55,11 +55,11 @@ jobs:
       terraformVersion: '1.10.5'
     displayName: 'Installing Terraform'
 
-  - task: DownloadPipelineArtifact@2
-    inputs:
-      artifact: terraform-env
-      targetPath: $(System.DefaultWorkingDirectory)/.terraform
-    displayName: 'Restore Terraform environment'
+  # - task: DownloadPipelineArtifact@2
+  #   inputs:
+  #     artifact: terraform-env
+  #     targetPath: $(System.DefaultWorkingDirectory)/.terraform
+  #   displayName: 'Restore Terraform environment'
 
   - task: TerraformTaskV4@4
     inputs:
