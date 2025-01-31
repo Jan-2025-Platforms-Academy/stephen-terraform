@@ -10,7 +10,12 @@ pool:
   name: stephen-agent
 
 stages:
-- stage: Deploy
+- stage: DeployDev
+  jobs:
+  - template: .azure-pipelines/jobs.yml
+    parameters:
+      env: 'dev'
+- stage: DeployProd
   jobs:
   - template: .azure-pipelines/jobs.yml
     parameters:
