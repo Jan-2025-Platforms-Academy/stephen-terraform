@@ -10,6 +10,7 @@ pool: stephen-agent
 
 jobs: DevPlan
 - job:
+  pool: stephen-agent
   steps:
   - task: TerraformInstaller@1
     inputs:
@@ -34,7 +35,8 @@ jobs: DevPlan
       environmentServiceNameAzureRM: '2025-Jan-Platforms-Academy(d38fa016-777f-4647-bbc8-0aaf1933103c)'
     displayName: 'Terraform plan'
 
-- job: dev apply
+- job: DevApply
+  pool: stephen-agent
   dependsOn: DevPlan
   steps:
   - task: TerraformTaskV4@4
