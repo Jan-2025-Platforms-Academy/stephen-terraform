@@ -11,13 +11,18 @@ resource "azurerm_virtual_network" "public" {
     team = var.team_name
   }
 }
-
 resource "azurerm_subnet" "public" {
-  count                = 3
+  count                = 2
   name                 = "${var.team_name}-public-subnet-${count.index}"
   resource_group_name  = azurerm_resource_group.this.name
   virtual_network_name = azurerm_virtual_network.public.name
   address_prefixes     = [var.public_subnet_cidrs[count.index]]
+}
+resource "azurerm_subnet" "bastion" {
+  name                 = "AzureBastionSubnet"
+  resource_group_name  = azurerm_resource_group.this.name
+  virtual_network_name = azurerm_virtual_network.public.name
+  address_prefixes     = [var.bastion_cidr]
 }
 
 
@@ -32,14 +37,53 @@ resource "azurerm_virtual_network" "private" {
     team = var.team_name
   }
 }
-
 resource "azurerm_subnet" "private" {
-  count                = 3
+  count                = 2
   name                 = "${var.team_name}-private-subnet-${count.index}"
   resource_group_name  = azurerm_resource_group.this.name
   virtual_network_name = azurerm_virtual_network.private.name
   address_prefixes     = [var.private_subnet_cidrs[count.index]]
 }
+# Create Private Security Group
+resource "azurerm_network_security_group" "private" {
+  name                = "${var.team_name}-private-nsg"
+  resource_group_name = azurerm_resource_group.this.name
+  location            = azurerm_resource_group.this.location
+
+  security_rule {
+    name                       = "PublicToPrivate"
+    priority                   = 1001
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "*"
+    source_port_range          = "*"
+    destination_port_range     = "*"
+    source_address_prefix      = var.public_vnet_cidr
+    destination_address_prefix = var.private_vnet_cidr
+  }
+  security_rule {
+    name                       = "web"
+    priority                   = 1008
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "80"
+    source_address_prefix      = "*"
+    destination_address_prefix = var.private_vnet_cidr
+  }
+
+  tags = {
+    team = var.team_name
+  }
+}
+# Associate the Network Security Group to the subnet
+resource "azurerm_subnet_network_security_group_association" "private" {
+  count                     = 2
+  subnet_id                 = azurerm_subnet.private[count.index].id
+  network_security_group_id = azurerm_network_security_group.private.id
+}
+
 
 
 # Ceate VNet Peering

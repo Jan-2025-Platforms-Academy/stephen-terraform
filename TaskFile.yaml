@@ -1,0 +1,22 @@
+# https://taskfile.dev
+# E.g task apply -- prod
+
+version: "3"
+tasks:
+  init:
+    desc: Run Terraform init and point to a specific environments statefile.
+    preconditions:
+      - sh: test -f ./{{.CLI_ARGS}}.tfvars
+        msg: "You must pass the name of a configured environment."
+    cmds:
+      - terraform init -reconfigure -backend-config="key=terraform-{{.CLI_ARGS}}.tfstate"
+  plan:
+    deps: [init]
+    desc: Run Terraform init and point to a specific environments statefile.
+    cmds:
+      - terraform plan -var-file={{.CLI_ARGS}}.tfvars
+  apply:
+    deps: [init]
+    desc: Run Terraform apply and point to a specific environments statefile.
+    cmds:
+      - terraform apply -var-file={{.CLI_ARGS}}.tfvars --auto-approve
