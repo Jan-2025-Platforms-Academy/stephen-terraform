@@ -14,6 +14,8 @@ terraform {
     storage_account_name = "stephenstorage"
     container_name       = "stephen-blob"
   }
+
+  required_version = "1.10.5"
 }
 
 provider "azurerm" {
