@@ -1,0 +1,59 @@
+jobs:
+- job: Plan
+  pool:
+    name: stephen-agent
+  steps:
+  - task: TerraformInstaller@1
+    inputs:
+      terraformVersion: '1.10.5'
+    displayName: 'Installing Terraform'
+
+  - task: TerraformTaskV4@4
+    inputs:
+      provider: 'azurerm'
+      command: 'init'
+      commandOptions: '-backend-config="key=terraform-${{ parameters.env }}.tfstate"'
+      backendServiceArm: '2025-Jan-Platforms-Academy(d38fa016-777f-4647-bbc8-0aaf1933103c)'
+      backendAzureRmResourceGroupName: 'stephen-blob'
+      backendAzureRmStorageAccountName: 'stephenstorage'
+      backendAzureRmContainerName: 'stephen-blob'
+      backendAzureRmKey: 'terraform-${{ parameters.env }}.tfstate'
+    displayName: 'Terraform init'
+
+  - task: TerraformTaskV4@4
+    inputs:
+      provider: 'azurerm'
+      command: 'plan'
+      commandOptions: '-var-file=${{ parameters.env }}.tfvars'
+      environmentServiceNameAzureRM: '2025-Jan-Platforms-Academy(d38fa016-777f-4647-bbc8-0aaf1933103c)'
+    displayName: 'Terraform plan'
+
+- job: Apply
+  pool:
+    name: stephen-agent
+  dependsOn: DevPlan
+  steps:
+  - task: TerraformInstaller@1
+    inputs:
+      terraformVersion: '1.10.5'
+    displayName: 'Installing Terraform'
+
+  - task: TerraformTaskV4@4
+    inputs:
+      provider: 'azurerm'
+      command: 'init'
+      commandOptions: '-backend-config="key=terraform-${{ parameters.env }}.tfstate"'
+      backendServiceArm: '2025-Jan-Platforms-Academy(d38fa016-777f-4647-bbc8-0aaf1933103c)'
+      backendAzureRmResourceGroupName: 'stephen-blob'
+      backendAzureRmStorageAccountName: 'stephenstorage'
+      backendAzureRmContainerName: 'stephen-blob'
+      backendAzureRmKey: 'terraform-${{ parameters.env }}.tfstate'
+    displayName: 'Reinitialize Terraform'
+
+  - task: TerraformTaskV4@4
+    inputs:
+      provider: 'azurerm'
+      command: 'apply'
+      commandOptions: '-var-file=${{ parameters.env }}.tfvars'
+      environmentServiceNameAzureRM: '2025-Jan-Platforms-Academy(d38fa016-777f-4647-bbc8-0aaf1933103c)'
+    displayName: 'Terraform apply'
