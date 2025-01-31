@@ -34,7 +34,7 @@ jobs:
     name: stephen-agent
   timeoutInMinutes: 1440
   steps:
-  - task: ManualValidation@0
+  - task: ManualValidation@1
     timeoutInMinutes: 1440
     inputs:
       onTimeout: 'resume'
