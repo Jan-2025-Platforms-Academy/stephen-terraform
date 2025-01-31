@@ -18,6 +18,7 @@ jobs:
     inputs:
       terraformVersion: '1.10.5'
     displayName: 'Installing Terraform'
+
   - task: TerraformTaskV4@4
     inputs:
       provider: 'azurerm'
@@ -29,6 +30,7 @@ jobs:
       backendAzureRmContainerName: 'stephen-blob'
       backendAzureRmKey: 'terraform-prod.tfstate'
     displayName: 'Terraform init'
+
   - task: TerraformTaskV4@4
     inputs:
       provider: 'azurerm'
@@ -36,12 +38,29 @@ jobs:
       commandOptions: '-var-file=prod.tfvars'
       environmentServiceNameAzureRM: '2025-Jan-Platforms-Academy(d38fa016-777f-4647-bbc8-0aaf1933103c)'
     displayName: 'Terraform plan'
+  
+  - task: PublishPipelineArtifact@1
+    inputs:
+      targetPath: $(System.DefaultWorkingDirectory)/.terraform
+      artifact: terraform-env
+    displayName: 'Save Terraform environment'
 
 - job: DevApply
   pool:
     name: stephen-agent
   dependsOn: DevPlan
   steps:
+  - task: TerraformInstaller@1
+    inputs:
+      terraformVersion: '1.10.5'
+    displayName: 'Installing Terraform'
+
+  - task: DownloadPipelineArtifact@2
+    inputs:
+      artifact: terraform-env
+      targetPath: $(System.DefaultWorkingDirectory)/.terraform
+    displayName: 'Restore Terraform environment'
+    
   - task: TerraformTaskV4@4
     inputs:
       provider: 'azurerm'
