@@ -28,6 +28,17 @@ jobs:
       environmentServiceNameAzureRM: '2025-Jan-Platforms-Academy(d38fa016-777f-4647-bbc8-0aaf1933103c)'
     displayName: 'Terraform plan'
 
+- job: ManualValidation
+  displayName: Wait for validation
+  pool:
+    name: stephen-agent
+  timeoutInMinutes: 1440
+  steps:
+  - task: ManualValidation@0
+    timeoutInMinutes: 1440
+    inputs:
+      onTimeout: 'resume'
+
 - job: Apply
   pool:
     name: stephen-agent
