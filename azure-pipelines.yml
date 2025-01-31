@@ -18,7 +18,11 @@ steps:
   inputs:
     provider: 'azurerm'
     command: 'init'
+    commandOptions: '-backend-config="key=terraform-prod.tfstate"'
     backendServiceArm: '2025-Jan-Platforms-Academy(1)(d38fa016-777f-4647-bbc8-0aaf1933103c)'
+    backendAzureRmResourceGroupName: 'stephen-blob'
+    backendAzureRmStorageAccountName: 'stephenstorage'
+    backendAzureRmContainerName: 'stephen-blob'
     backendAzureRmKey: 'terraform-prod.tfstate'
   displayName: 'Terraform init'
 
@@ -27,5 +31,5 @@ steps:
     provider: 'azurerm'
     command: 'plan'
     commandOptions: '-var-file=prod.tfvars'
-    environmentServiceNameAzureRM: '2025-Jan-Platforms-Academy(d38fa016-777f-4647-bbc8-0aaf1933103c)'
+    environmentServiceNameAzureRM: '2025-Jan-Platforms-Academy(1)(d38fa016-777f-4647-bbc8-0aaf1933103c)'
   displayName: 'Terraform plan'
