@@ -13,5 +13,5 @@ stages:
 - stage: Deploy
   jobs:
   - template: .azure-pipelines/jobs.yml
-      parameters:
-        env: 'prod'
+    parameters:
+      env: 'prod'
