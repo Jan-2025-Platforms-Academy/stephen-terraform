@@ -41,7 +41,9 @@ jobs:
 - job: Apply
   pool:
     name: stephen-agent
-  dependsOn: Plan
+  dependsOn: 
+  - Plan
+  - ManualValidation
   steps:
   - task: TerraformInstaller@1
     inputs:
