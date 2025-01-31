@@ -19,6 +19,7 @@ steps:
     provider: 'azurerm'
     command: 'init'
     backendAzureRmKey: 'terraform-prod.tfstate'
+  displayName: 'Terraform init'
 
 - task: TerraformTaskV4@4
   inputs:
@@ -26,3 +27,4 @@ steps:
     command: 'plan'
     commandOptions: '-var-file=prod.tfvars'
     environmentServiceNameAzureRM: '2025-Jan-Platforms-Academy(d38fa016-777f-4647-bbc8-0aaf1933103c)'
+  displayName: 'Terraform plan'
