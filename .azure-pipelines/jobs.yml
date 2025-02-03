@@ -51,10 +51,10 @@ jobs:
   - Plan
   - ManualValidation
   steps:
-  # - task: TerraformInstaller@1
-  #   inputs:
-  #     terraformVersion: '1.10.5'
-  #   displayName: 'Installing Terraform'
+  - task: TerraformInstaller@1
+    inputs:
+      terraformVersion: '1.10.5'
+    displayName: 'Installing Terraform'
 
   # - task: TerraformTaskV4@4
   #   inputs:
