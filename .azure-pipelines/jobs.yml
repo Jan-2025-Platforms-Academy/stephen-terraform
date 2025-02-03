@@ -28,6 +28,12 @@ jobs:
       environmentServiceNameAzureRM: '2025-Jan-Platforms-Academy(d38fa016-777f-4647-bbc8-0aaf1933103c)'
     displayName: 'Terraform plan'
 
+  - task: PublishPipelineArtifact@1
+    inputs:
+      targetPath: '$(System.DefaultWorkingDirectory)'
+      artifact: 'terraform-build'
+    displayName: 'Publish Terraform build artifacts'
+
 - job: ManualValidation
   displayName: Wait for validation
   pool: server
@@ -45,22 +51,28 @@ jobs:
   - Plan
   - ManualValidation
   steps:
-  - task: TerraformInstaller@1
-    inputs:
-      terraformVersion: '1.10.5'
-    displayName: 'Installing Terraform'
+  # - task: TerraformInstaller@1
+  #   inputs:
+  #     terraformVersion: '1.10.5'
+  #   displayName: 'Installing Terraform'
 
-  - task: TerraformTaskV4@4
+  # - task: TerraformTaskV4@4
+  #   inputs:
+  #     provider: 'azurerm'
+  #     command: 'init'
+  #     commandOptions: '-backend-config="key=terraform-${{ parameters.env }}.tfstate"'
+  #     backendServiceArm: '2025-Jan-Platforms-Academy(d38fa016-777f-4647-bbc8-0aaf1933103c)'
+  #     backendAzureRmResourceGroupName: 'stephen-blob'
+  #     backendAzureRmStorageAccountName: 'stephenstorage'
+  #     backendAzureRmContainerName: 'stephen-blob'
+  #     backendAzureRmKey: 'terraform-${{ parameters.env }}.tfstate'
+  #   displayName: 'Reinitialize Terraform'
+
+  - task: DownloadPipelineArtifact@2
     inputs:
-      provider: 'azurerm'
-      command: 'init'
-      commandOptions: '-backend-config="key=terraform-${{ parameters.env }}.tfstate"'
-      backendServiceArm: '2025-Jan-Platforms-Academy(d38fa016-777f-4647-bbc8-0aaf1933103c)'
-      backendAzureRmResourceGroupName: 'stephen-blob'
-      backendAzureRmStorageAccountName: 'stephenstorage'
-      backendAzureRmContainerName: 'stephen-blob'
-      backendAzureRmKey: 'terraform-${{ parameters.env }}.tfstate'
-    displayName: 'Reinitialize Terraform'
+      artifact: 'terraform-build'
+      path: '$(System.DefaultWorkingDirectory)'
+    displayName: 'Download Terraform build artifacts'
 
   - task: TerraformTaskV4@4
     inputs:
