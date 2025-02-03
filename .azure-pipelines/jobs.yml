@@ -57,25 +57,13 @@ jobs:
       terraformVersion: '1.10.5'
     displayName: 'Installing Terraform'
 
-  # - task: TerraformTaskV4@4
-  #   inputs:
-  #     provider: 'azurerm'
-  #     command: 'init'
-  #     commandOptions: '-backend-config="key=terraform-${{ parameters.env }}.tfstate"'
-  #     backendServiceArm: '2025-Jan-Platforms-Academy(d38fa016-777f-4647-bbc8-0aaf1933103c)'
-  #     backendAzureRmResourceGroupName: 'stephen-blob'
-  #     backendAzureRmStorageAccountName: 'stephenstorage'
-  #     backendAzureRmContainerName: 'stephen-blob'
-  #     backendAzureRmKey: 'terraform-${{ parameters.env }}.tfstate'
-  #   displayName: 'Reinitialize Terraform'
-
   - task: DownloadPipelineArtifact@2
     inputs:
       artifact: 'terraform-build'
       path: '$(System.DefaultWorkingDirectory)'
     displayName: 'Download Terraform build artifacts'
 
-  - script: cd $(System.DefaultWorkingDirectory) && ls -la
+  - script: cd $(System.DefaultWorkingDirectory)/.terraform && ls -la
 
   - task: TerraformTaskV4@4
     inputs:
