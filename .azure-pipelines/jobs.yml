@@ -37,6 +37,8 @@ jobs:
 - job: ManualValidation
   displayName: Wait for validation
   pool: server
+  dependsOn: 
+  - Plan
   timeoutInMinutes: 1440
   steps:
   - task: ManualValidation@1
@@ -48,7 +50,6 @@ jobs:
   pool:
     name: stephen-agent
   dependsOn: 
-  - Plan
   - ManualValidation
   steps:
   - task: TerraformInstaller@1
@@ -56,17 +57,17 @@ jobs:
       terraformVersion: '1.10.5'
     displayName: 'Installing Terraform'
 
-  # - task: TerraformTaskV4@4
-  #   inputs:
-  #     provider: 'azurerm'
-  #     command: 'init'
-  #     commandOptions: '-backend-config="key=terraform-${{ parameters.env }}.tfstate"'
-  #     backendServiceArm: '2025-Jan-Platforms-Academy(d38fa016-777f-4647-bbc8-0aaf1933103c)'
-  #     backendAzureRmResourceGroupName: 'stephen-blob'
-  #     backendAzureRmStorageAccountName: 'stephenstorage'
-  #     backendAzureRmContainerName: 'stephen-blob'
-  #     backendAzureRmKey: 'terraform-${{ parameters.env }}.tfstate'
-  #   displayName: 'Reinitialize Terraform'
+  - task: TerraformTaskV4@4
+    inputs:
+      provider: 'azurerm'
+      command: 'init'
+      commandOptions: '-backend-config="key=terraform-${{ parameters.env }}.tfstate"'
+      backendServiceArm: '2025-Jan-Platforms-Academy(d38fa016-777f-4647-bbc8-0aaf1933103c)'
+      backendAzureRmResourceGroupName: 'stephen-blob'
+      backendAzureRmStorageAccountName: 'stephenstorage'
+      backendAzureRmContainerName: 'stephen-blob'
+      backendAzureRmKey: 'terraform-${{ parameters.env }}.tfstate'
+    displayName: 'Reinitialize Terraform'
 
   - task: DownloadPipelineArtifact@2
     inputs:
