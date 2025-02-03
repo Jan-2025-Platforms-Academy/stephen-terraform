@@ -75,7 +75,7 @@ jobs:
       path: '$(System.DefaultWorkingDirectory)'
     displayName: 'Download Terraform build artifacts'
 
-  - script: cd <artifact dir> && ls -la
+  - script: cd $(System.DefaultWorkingDirectory) && ls -la
 
   - task: TerraformTaskV4@4
     inputs:
